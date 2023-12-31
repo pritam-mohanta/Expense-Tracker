@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+</head>
+<body>
+  <form onsubmit="savetolocalstorage(event)">
+    <label>Your Expense Amount :</label> 
+    <input type="number" name="amount" id="amountId" required/> <br/>
+    <label>Your Description :</label> 
+    <input type="text" name="desc" id="descId" required/> <br/>
+    <label>Catagory :</label> 
+    <input type="text" name="cat" id="catId" required/>
+    <button>Add Expense</button>
+    
+  </form>
+  <ul id="listOfItems"></ul>
+  <script>
+    function savetolocalstorage(event){
+      event.preventDefault();
+      const amount=event.target.amount.value;
+      const desc=event.target.desc.value;
+      const cat=event.target.cat.value;
+      // localStorage.setItem('amount',amount)
+      // localStorage.setItem('desc',desc)
+      // localStorage.setItem('cat',cat)
+      const obj = {
+        amount,
+        desc,
+        cat
+      }
+      localStorage.setItem('User_Details',JSON.stringify(obj))
+      showNewUser(obj)
+    }
+  
+  
+    function showNewUser(obj){
+      //only show on screen
+    const parentElem=document.getElementById('listOfItems')
+    const childElem=document.createElement('li')
+    childElem.textContent=obj.amount+'-'+obj.desc+'-'+obj.cat
+    //parentElem.appendChild(childElem)
+    //parentElem.innerHTML = parentElem.innerHTML +`<li>${obj.amount}-${obj.desc}-${obj.cat}</li>`
+
+    //delete buttion added  
+    const deleteButton = document.createElement('input')
+    deleteButton.type="button"
+    deleteButton.value='Delete Expences'
+    deleteButton.onclick = () =>{
+      localStorage.removeItem(obj.desc)
+      parentElem.removeChild(childElem)
+    }
+    // childElem.appendChild(deleteButton)
+    // parentElem.appendChild(childElem)
+
+    //edit button added
+    const editButton = document.createElement('input')
+    editButton.type="button"
+    editButton.value='Edit Expences'
+    editButton.onclick = () =>{
+      localStorage.removeItem(obj.desc)
+      parentElem.removeChild(childElem)
+      document.getElementById('amountId').value=obj.amount
+      document.getElementById('descId').value=obj.desc
+      document.getElementById('catId').value=obj.cat
+    }
+    childElem.appendChild(deleteButton)
+    childElem.appendChild(editButton)
+    parentElem.appendChild(childElem)
+  }
+  </script>
+  
+</body>
+
+</html>
